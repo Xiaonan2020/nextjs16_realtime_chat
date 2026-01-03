@@ -3,5 +3,5 @@ import type { App } from "../app/api/[[...slugs]]/route"
 
 const baseUrl = typeof window !== "undefined" ? window.location.origin : "http://localhost:3000"
 
-export const client = treaty<App>(`${baseUrl}/api`).api
+export const client = treaty<App>(`${baseUrl}`).api
 // const res = client.user.get()
