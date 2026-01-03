@@ -1,36 +1,330 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Realtime Chat 实时自毁聊天应用
 
-## Getting Started
+一个基于 Next.js 的实时自毁聊天应用，提供私密、安全的即时通讯体验。房间具有自动过期机制，所有消息在房间过期或被销毁后永久删除。
 
-First, run the development server:
+## ✨ 功能特性
+
+- 🔒 **私密聊天** - 创建安全的聊天房间，保护用户隐私
+- ⏰ **自动过期** - 房间默认 10 分钟后自动销毁，所有消息永久删除
+- 📡 **实时通信** - 基于 WebSocket 的实时消息推送
+- 👤 **匿名身份** - 自动生成匿名用户名，无需注册
+- 📱 **响应式设计** - 完美适配桌面和移动设备
+- 🎨 **现代 UI** - 使用 Tailwind CSS 构建的深色主题界面
+- 🗑️ **手动销毁** - 支持随时手动销毁房间
+
+## 🛠️ 技术栈
+
+### 前端
+- **Next.js 16** - React 框架
+- **React 19** - UI 库
+- **TypeScript** - 类型安全
+- **Tailwind CSS 4** - 样式框架
+- **@tanstack/react-query** - 数据获取和状态管理
+- **@upstash/realtime** - 实时通信客户端
+
+### 后端
+- **Elysia** - 高性能 API 框架
+- **@upstash/redis** - Redis 数据库客户端
+- **@upstash/realtime** - 实时通信服务
+- **Zod** - 数据验证
+
+### 开发工具
+- **ESLint** - 代码检查
+- **PostCSS** - CSS 处理
+- **Babel React Compiler** - React 编译器优化
+
+## 📦 安装
+
+### 前置要求
+
+- Node.js 18+ 
+- npm / yarn / pnpm / bun
+- [Upstash Redis](https://upstash.com/) 账号
+
+### 环境变量配置
+
+创建 `.env.local` 文件并配置以下环境变量：
+
+```env
+UPSTASH_REDIS_REST_URL=your_redis_url
+UPSTASH_REDIS_REST_TOKEN=your_redis_token
+```
+
+获取 Upstash Redis 凭证：
+1. 访问 [Upstash Console](https://console.upstash.com/)
+2. 创建新的 Redis 数据库
+3. 复制 REST URL 和 Token 到 `.env.local`
+
+### 安装依赖
+
+```bash
+npm install
+# 或
+yarn install
+# 或
+pnpm install
+# 或
+bun install
+```
+
+## 🚀 使用
+
+### 开发模式
+
+启动开发服务器：
 
 ```bash
 npm run dev
-# or
+# 或
 yarn dev
-# or
+# 或
 pnpm dev
-# or
+# 或
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+打开 [http://localhost:3000](http://localhost:3000) 查看应用。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 生产构建
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+构建生产版本：
 
-## Learn More
+```bash
+npm run build
+```
 
-To learn more about Next.js, take a look at the following resources:
+启动生产服务器：
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm start
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 代码检查
 
-## Deploy on Vercel
+运行 ESLint 检查代码：
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+npm run lint
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📁 项目结构
+
+```
+realtime_chat/
+├── public/                 # 静态资源
+├── src/
+│   ├── app/
+│   │   ├── api/
+│   │   │   ├── [[...slugs]]/
+│   │   │   │   ├── auth.ts          # 认证中间件
+│   │   │   │   └── route.ts         # API 路由
+│   │   │   └── realtime/
+│   │   │       └── route.ts         # 实时通信端点
+│   │   ├── room/
+│   │   │   └── [roomId]/
+│   │   │       └── page.tsx         # 聊天房间页面
+│   │   ├── favicon.ico
+│   │   ├── globals.css              # 全局样式
+│   │   ├── layout.tsx               # 根布局
+│   │   └── page.tsx                 # 首页（大厅）
+│   ├── components/
+│   │   └── providers.tsx            # React Query 和 Realtime Provider
+│   ├── hooks/
+│   │   └── use-username.ts          # 用户名 Hook
+│   └── lib/
+│       ├── client.ts                # API 客户端
+│       ├── realtime-client.ts       # 实时通信客户端
+│       ├── realtime.ts              # 实时通信配置
+│       └── redis.ts                 # Redis 客户端
+├── .gitignore
+├── README.md
+├── bun.lock
+├── eslint.config.mjs
+├── next.config.ts
+├── package.json
+├── postcss.config.mjs
+└── tsconfig.json
+```
+
+## 🎯 核心功能说明
+
+### 房间管理
+
+- **创建房间**: 生成唯一的房间 ID
+- **房间过期**: 默认 10 分钟后自动销毁
+- **手动销毁**: 用户可随时销毁房间
+- **TTL 查询**: 实时显示剩余时间
+
+### 消息功能
+
+- **发送消息**: 支持文本消息（最多 1000 字符）
+- **实时接收**: 基于 WebSocket 的实时推送
+- **消息历史**: 自动保存和加载消息记录
+- **时间戳**: 显示消息发送时间
+
+### 用户身份
+
+- **匿名用户**: 自动生成匿名用户名
+- **本地存储**: 用户名保存在 localStorage
+- **身份标识**: 每个用户有唯一的身份 ID
+
+## 🔌 API 接口
+
+### 房间相关
+
+#### 创建房间
+```
+POST /api/room/create
+```
+响应:
+```json
+{
+  "roomId": "unique-room-id"
+}
+```
+
+#### 获取房间剩余时间
+```
+GET /api/room/ttl?roomId=xxx
+```
+响应:
+```json
+{
+  "ttl": 600
+}
+```
+
+#### 销毁房间
+```
+DELETE /api/room?roomId=xxx
+```
+
+### 消息相关
+
+#### 发送消息
+```
+POST /api/messages?roomId=xxx
+```
+请求体:
+```json
+{
+  "sender": "username",
+  "text": "message content"
+}
+```
+
+#### 获取消息历史
+```
+GET /api/messages?roomId=xxx
+```
+响应:
+```json
+{
+  "messages": [
+    {
+      "id": "msg-id",
+      "sender": "username",
+      "text": "message",
+      "timestamp": 1234567890,
+      "roomId": "room-id"
+    }
+  ]
+}
+```
+
+### 实时通信
+
+#### WebSocket 连接
+```
+GET /api/realtime
+```
+
+事件:
+- `chat.message` - 新消息
+- `chat.destroy` - 房间销毁
+
+## 🔒 安全特性
+
+- **Token 认证**: 每个房间连接需要有效的 token
+- **房间隔离**: 不同房间的消息完全隔离
+- **自动清理**: 过期数据自动删除
+- **输入验证**: 使用 Zod 进行严格的数据验证
+
+## 🎨 UI 特性
+
+- **深色主题**: 护眼的深色界面
+- **响应式布局**: 自适应各种屏幕尺寸
+- **实时倒计时**: 显示房间剩余时间
+- **消息区分**: 区分自己和他人消息
+- **复制链接**: 一键复制房间链接
+
+## 📝 配置说明
+
+### 修改房间过期时间
+
+编辑 `src/app/api/[[...slugs]]/route.ts`:
+
+```typescript
+const ROOM_TTL_SECONDS = 6 * 10; // 修改为所需的秒数
+```
+
+### 修改消息限制
+
+编辑 `src/app/api/[[...slugs]]/route.ts`:
+
+```typescript
+body: z.object({
+  sender: z.string().max(100),  // 修改发送者名称最大长度
+  text: z.string().max(1000),   // 修改消息最大长度
+}),
+```
+
+## 🚀 部署
+
+### Vercel 部署
+
+1. 将代码推送到 GitHub
+2. 在 Vercel 导入项目
+3. 配置环境变量
+4. 部署完成
+
+### 其他平台
+
+项目可部署到任何支持 Next.js 的平台：
+- Vercel
+- Netlify
+- Railway
+- Render
+- 自托管服务器
+
+## 🤝 贡献
+
+欢迎提交 Issue 和 Pull Request！
+
+## 📄 许可证
+
+MIT License
+
+## 🔗 相关链接
+
+- [Next.js 文档](https://nextjs.org/docs)
+- [Upstash 文档](https://upstash.com/docs)
+- [Elysia 文档](https://elysiajs.com/)
+- [Tailwind CSS 文档](https://tailwindcss.com/docs)
+- [React Query 文档](https://tanstack.com/query/latest)
+
+## 💡 使用提示
+
+1. **房间链接**: 创建房间后，复制链接分享给其他用户
+2. **时间限制**: 注意房间剩余时间，及时保存重要信息
+3. **多设备**: 同一用户可在多个设备同时登录
+4. **隐私保护**: 房间销毁后，所有数据无法恢复
+
+## 🐛 已知问题
+
+- 房间过期后，用户需要手动刷新页面
+- 网络断开后，需要重新连接房间
+
+## 📧 联系方式
+
+如有问题或建议，欢迎通过 Issue 联系。
