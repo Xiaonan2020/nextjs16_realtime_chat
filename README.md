@@ -1,5 +1,7 @@
 # Realtime Chat 实时自毁聊天应用
 
+> 本项目是基于 [joschan21/nextjs16_realtime_chat](https://github.com/joschan21/nextjs16_realtime_chat) 的复刻版本，感谢原作者的开源贡献。
+
 一个基于 Next.js 的实时自毁聊天应用，提供私密、安全的即时通讯体验。房间具有自动过期机制，所有消息在房间过期或被销毁后永久删除。
 
 ## ✨ 功能特性
@@ -328,3 +330,7 @@ MIT License
 ## 📧 联系方式
 
 如有问题或建议，欢迎通过 Issue 联系。
+
+## 🙏 致谢
+
+本项目复刻自 [joschan21/nextjs16_realtime_chat](https://github.com/joschan21/nextjs16_realtime_chat)，感谢原作者 joschan21 的开源贡献和优秀设计。
